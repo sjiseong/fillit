@@ -6,7 +6,7 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:39:34 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/06 15:55:49 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/06 17:56:22 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int		main(int ac, char **av)
 {
 	char	*src;
-	t_list	*lst;
+	int		**arr_tet;
 	char	**board;
 	int		board_size;
 	int		ret;
@@ -28,14 +28,14 @@ int		main(int ac, char **av)
 	}
 	if (!(src = get_src(av[1])))
 		print_error();
-	if (!(lst = parse_src(src)))
+	if (!(arr_tet = parse_src(src)))
 		print_error();
 	ret = 0;
-	board_size = get_smallest_size(lst);
+	board_size = get_smallest_size(arr_tet);
 	while (!ret)
 	{
 		board = make_board(board_size);
-		ret = fillit(lst, board, board_size);
+		ret = fillit(arr_tet, board, board_size);
 		board_size++;
 	}
 	print_board(board, --board_size);

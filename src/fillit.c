@@ -6,7 +6,7 @@
 /*   By: aksuleim <aksuleim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:36:30 by aksuleim          #+#    #+#             */
-/*   Updated: 2020/03/06 16:41:15 by aksuleim         ###   ########.fr       */
+/*   Updated: 2020/03/06 18:05:41 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	board_cpy(char	**board, char **tmp);
 int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size);
-int		fillit(t_list *lst, char **board, int board_size);
+int		fillit(int **arr_tet, char **board, int board_size);
 void	free_board(char **board);
 char	**make_board(int board_size);
 
@@ -36,16 +36,25 @@ int		get_smallest_size(t_list *lst)
 	return (ret);
 }
 
+
+int		fillit(int **arr_tet, char **board, int board_size)
+{
+	int	i;
+
+	i = 0;
+	while (arr_tet[i])
+	{
+		fillit(arr_tet, 
+	}
+}
+
+/*
 int		fillit(t_list *lst, char **board, int board_size)
 {
 	int		i;
-	int		*address;
-	int		j;
-	int		x;
-	int		y;
-
+	int		*tet;
 	i = -1;
-	address = malloc(sizeof(int) * 4);
+	tet = malloc(sizeof(int) * 4);
 	if (!lst->content)
 		return (1);
 	while (++i * 4 < board_size * board_size)
@@ -62,6 +71,7 @@ int		fillit(t_list *lst, char **board, int board_size)
 	// return (fillit(lst->next, board_size, board));
 	return (0);
 }
+*/
 
 int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size)
 {

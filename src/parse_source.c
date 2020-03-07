@@ -6,7 +6,7 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 15:34:17 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/06 15:53:13 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/06 17:55:20 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char		*get_src(char *filename)
 	return (buf);
 }
 
+/*
 t_list		*add_list(t_list **lst)
 {
 	t_list	*tmp;
@@ -55,6 +56,7 @@ t_list		*add_list(t_list **lst)
 		return (tmp->next);
 	}
 }
+*/
 
 static	int	parse_tet(char *src, int *tet, int i)
 {
@@ -113,21 +115,24 @@ static	int	check_tet(int *tet)
 	return (1);
 }
 
-t_list		*parse_src(char *src)
+int		**parse_src(char *src)
 {
-	t_list	*lst;
-	t_list	*tmp;
+	int		**arr_tet;
 	int		i;
+	int		j;
 
 	i = 0;
-	while (*src)
+	j = 0;
+	arr_tet = (int**)malloc(sizeof(int*) * 27);
+	while (src[j * 21])
 	{
-		tmp = add_list(&lst);
-		if (parse_tet(src + i, tmp->content, i) != 4)
+		arr_tet[j] = (int*) malloc(sizeof(int) * 4);
+		if (parse_tet(src + j * 21, arr_tet[j], i) != 4)
 			print_error();
-		if (!check_tet(tmp->content))
+		if (!check_tet(arr_tet[j]))
 			print_error();
-		src += 21;
+		j++;
 	}
-	return (lst);
+	arr_tet[j] = 0;
+	return (arr_tet);
 }
