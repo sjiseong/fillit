@@ -6,7 +6,7 @@
 /*   By: aksuleim <aksuleim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:36:30 by aksuleim          #+#    #+#             */
-/*   Updated: 2020/03/06 16:41:15 by aksuleim         ###   ########.fr       */
+/*   Updated: 2020/03/06 17:05:57 by aksuleim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,24 @@ int		fillit(t_list *lst, char **board, int board_size)
 	int		y;
 
 	i = -1;
-	address = malloc(sizeof(int) * 4);
+	x = 0;
+	y = 0;
+	j = 0;
 	if (!lst->content)
 		return (1);
 	while (++i * 4 < board_size * board_size)
 	{
-		j = 0;
-		x = 0;
-		y = 0;
-		address = (int *)(lst->content);
-		if (ft_is_free(board, address, x, y, j, board_size))
-		{
-
-		}
+		address = (int *)(lst->content);		
+		ft_is_free(board, address, x, y, j, board_size);
+		x++;
+		y++;
+		j++;
+		return (fillit(lst->next, board, board_size));
 	}
-	// return (fillit(lst->next, board_size, board));
 	return (0);
 }
 
-int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size)
+int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size, int temp_x, int temp_y)
 {
 	int		next;
 	int		curr;
@@ -75,22 +74,22 @@ int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size)
 		curr = address[j];
 		next = address[j + 1];
 		board_cpy(board, tmp);
-		if (board[y][x] == '.')
+		if (board[temp_y][temp_x] == '.')
 		{
-			tmp[y][x] = '#';
-			return (ft_is_free(board, address, x + next % 4 - curr % 4, y + next / 4 - curr / 4, j++, board_size));
+			tmp[temp_y][temp_x] = '#';
+			return (ft_is_free(board, address, x, y , j++, board_size, x + next % 4 - curr % 4, y + next / 4 - curr / 4));
 			free_board(tmp);
 		}
 		else if (x < board_size)
-			return (ft_is_free(board, address, x++, y, j--, board_size));
+			return (ft_is_free(board, address, x, y, 0, board_size, x++, y));
 		else if (x >= board_size && y < board_size)
 		{
-			x = 0;
-			return (ft_is_free(board, address, x, y++, j--, board_size));
+			return (ft_is_free(board, address, x, y, 0, board_size, 0, y++));
 		}
 		else
 			return (-1);
 	}
+	board_cpy(tmp, board);
 	return (0);
 }
 

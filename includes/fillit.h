@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aksuleim <aksuleim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 12:57:02 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/06 15:42:09 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/06 16:48:21 by aksuleim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	**make_board(int board_size);
 **	print.c
 */
 
-void	print_board(char **board);
+void	print_board(char **board, int board_size);
 void	print_error(void);
 
 #endif
