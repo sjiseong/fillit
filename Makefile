@@ -6,13 +6,13 @@
 #    By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/27 20:41:32 by sjiseong          #+#    #+#              #
-#    Updated: 2020/03/06 13:17:21 by sjiseong         ###   ########.fr        #
+#    Updated: 2020/03/07 18:45:39 by sjiseong         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fillit
 
-SRC = main.c print.c parse_source.c fillit.c
+SRC = main.c print.c parse_source.c fillit.c board.c order.c
 
 SRC_PATH = src/
 
@@ -20,7 +20,7 @@ SRC_POS = $(addprefix $(SRC_PATH), $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-INC = includes
+INC = includes/
 
 LIBFT = src/libft/libft.a
 
@@ -33,7 +33,7 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(OBJ)
 		$(CC) $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT)
 
-$(OBJ): $(LIBFT)
+$(OBJ): $(LIBFT) $(SRC_POS)
 		$(CC) $(FLAGS) -I $(INC) -c $(SRC_POS)
 
 $(LIBFT):

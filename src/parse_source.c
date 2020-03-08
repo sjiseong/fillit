@@ -6,7 +6,7 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 15:34:17 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/06 17:55:20 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/07 19:14:28 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "fillit.h"
+#include "libft.h"
 
 char		*get_src(char *filename)
 {
@@ -35,29 +36,6 @@ char		*get_src(char *filename)
 	return (buf);
 }
 
-/*
-t_list		*add_list(t_list **lst)
-{
-	t_list	*tmp;
-
-	tmp = *lst;
-	if (!tmp)
-	{
-		*lst = (t_list*)malloc(sizeof(t_list));
-		(*lst)->content = (int*)malloc(sizeof(int) * 4);
-		return (*lst);
-	}
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = (t_list*)malloc(sizeof(t_list));
-		tmp->next->content = (int*)malloc(sizeof(int) * 4);
-		return (tmp->next);
-	}
-}
-*/
-
 static	int	parse_tet(char *src, int *tet, int i)
 {
 	int	x;
@@ -78,11 +56,14 @@ static	int	parse_tet(char *src, int *tet, int i)
 					(tet[nblock++] = x * 4 + y);
 			else if (src[i] != '.')
 				return (-1);
+			i++;
 		}
-		if (src[i] != '\n')
+		if (src[i++] != '\n')
 			return (-1);
 	}
-	if (src[i++] != '\n' && src[i] != 0)
+	if (src[i] != '\n' && src[i] != 0)
+		print_error();
+	if (src[i] == '\n' && !src[i + 1])
 		print_error();
 	return (nblock);
 }
@@ -93,8 +74,10 @@ static	int	check_tet(int *tet)
 	int	j;
 	int	x;
 	int	y;
+	int	check;
 
 	i = -1;
+	check = 0;
 	while (++i < 4)
 	{
 		j = -1;
@@ -103,15 +86,15 @@ static	int	check_tet(int *tet)
 			if (i == j)
 				continue;
 			x = tet[j] % 4 - tet[i] % 4;
-			y = (tet[j] - tet[j]) / 4;
+			y = tet[j] / 4 - tet[i] / 4;
 			x = x < 0 ? -x : x;
 			y = y < 0 ? -y : y;
-			if (!((x == 1 && y == 0) || (x == 0 && y == 1)))
-				break ;
+			if ((x == 1 && y == 0) || (x == 0 && y == 1))
+				check += 1;
 		}
-		if (j != 4)
-			return (0);
 	}
+	if (check < 6)
+		return (0);
 	return (1);
 }
 

@@ -6,157 +6,91 @@
 /*   By: aksuleim <aksuleim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:36:30 by aksuleim          #+#    #+#             */
-/*   Updated: 2020/03/07 12:40:50 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/07 21:15:02 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include <stdlib.h>
+#include "fillit.h"
 
-void	board_cpy(char	**board, char **tmp);
-int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size);
-int		fillit(int **arr_tet, char **board, int board_size);
-void	free_board(char **board);
-char	**make_board(int board_size);
+#include <stdio.h>
 
-int		get_smallest_size(t_list *lst)
+static int	fill_one_block(int pos, char **board, int params[3], char c, int xy[2])
 {
-	int		count;
-	int		ret;
-
-	count = 0;
-	ret = 2;
-	while (lst->next)
-	{
-		lst = lst->next;
-		count++;
-	}
-	while (ret * ret < count)
-		ret++;
-	return (ret);
-}
-
-
-int		fillit(int **arr_tet, char **board, int board_size)
-{
+	int	x;
+	int	y;
+	int	bsize;
 	int	i;
+	int	std;
 
-	tet = malloc(sizeof(int) * 4);
-	i = 0;
-	while (arr_tet[i])
-	{
-		fillit(arr_tet, 
-	}
+	bsize = params[0];
+	i = params[1];
+	std = params[2];
+	x = i % bsize + pos % 4 - std % 4;
+	y = i / bsize + pos / 4 - std / 4;
+	if (x < 0 || x >= bsize || y < 0 || y >= bsize || board[y][x] != '.')
+		return (0);
+	board[y][x] = c;
+	xy[0] = x;
+	xy[1] = y;
+	return (1);
 }
 
-/*
-int		fillit(t_list *lst, char **board, int board_size)
+static int	fill_one_tet(int *tet, char **board, int bsize, char c, int i)
 {
-	int		i;
-	int		*tet;
-	i = -1;
-	x = 0;
-	y = 0;
-	j = 0;
-	if (!lst->content)
+	int	arr[4][2];
+	int	j;
+	int	params[3];
+
+	params[0] = bsize;
+	params[1] = i;
+	params[2] = tet[0];
+	j = -1;
+	while (++j < 4)
+		if (!fill_one_block(tet[j], board, params, c, arr[j]))
+			break ;
+	if (j == 4)
 		return (1);
-	while (++i * 4 < board_size * board_size)
-	{
-		address = (int *)(lst->content);		
-		ft_is_free(board, address, x, y, j, board_size);
-		x++;
-		y++;
-		j++;
-		return (fillit(lst->next, board, board_size));
-	}
+	while (j-- > 0)
+		board[arr[j][1]][arr[j][0]] = '.';
 	return (0);
 }
-*/
 
-int		ft_is_free(char **board, int *address, int x, int y, int j, int board_size, int temp_x, int temp_y)
+int			fillit(int **arr_tet, char **board, int board_size, int *order)
 {
-	int		next;
-	int		curr;
+	int		i;
+	int		j;
 	char	**tmp;
 
-	tmp = NULL;
-	while (j < 4)
+	i = -1;
+	tmp = make_board(board_size);
+//	printf("before :\n");
+//	print_board(board, board_size);
+//	printf("\n");
+	while (arr_tet[++i])
 	{
-		curr = address[j];
-		next = address[j + 1];
-		board_cpy(board, tmp);
-		if (board[temp_y][temp_x] == '.')
-		{
-			tmp[temp_y][temp_x] = '#';
-			return (ft_is_free(board, address, x, y , j++, board_size, x + next % 4 - curr % 4, y + next / 4 - curr / 4));
-			free_board(tmp);
-		}
-		else if (x < board_size)
-			return (ft_is_free(board, address, x, y, 0, board_size, x++, y));
-		else if (x >= board_size && y < board_size)
-		{
-			return (ft_is_free(board, address, x, y, 0, board_size, 0, y++));
-		}
-		else
-			return (-1);
+		if (is_in_order(i, order))
+			continue;
+		copy_board(board, tmp, board_size);
+		add_in_order(i, order);
+		j = -1;
+		while (j++ < board_size * board_size)
+			if (fill_one_tet(arr_tet[i], board, board_size, i + 'A', j))
+			{
+				if (fillit(arr_tet, board, board_size, order))
+				{
+					free_board(tmp, board_size);
+					return (1);
+				}
+				copy_board(tmp, board, board_size);
+			}
+		revert_order(i, order);
 	}
-	board_cpy(tmp, board);
+//	printf("after :\n");
+//	print_board(board, board_size);
+//	printf("\n");
+	free_board(tmp, board_size);
+	if (get_order_len(order) == i)
+		return (1);
 	return (0);
 }
-
-void	board_cpy(char	**board, char **tmp)
-{
-	int		i;
-	int		j;
-
-	i = -1;
-	while (board[++i])
-	{
-		j = -1;
-		while (board[i][++j])
-			tmp[i][j] = board[i][j];
-	}
-}
-
-void	free_board(char **board)
-{
-	int		i;
-	int		j;
-
-	i = -1;
-	while (board[++i])
-	{
-		j = -1;
-		while (board[i][++j])
-			board[i][j] = '.';
-	}
-}
-
-char	**make_board(int board_size)
-{
-	char	**str;
-	int		i;
-	int		j;
-
-	i = -1;
-	str = (char **)malloc(sizeof(char *) * board_size);
-	while (++i < board_size)
-		str[i] = (char *)malloc(sizeof(char) * board_size);
-	str[i] = NULL;
-	i = -1;
-	j = 0;
-	while (++i < board_size)
-		while (j < board_size)
-			str[i][j++] = '.';
-	return (str);
-}
-
-// int		main(int ac, char **av)
-// {
-// 	int		size;
-// 	char	**str;
-// 	t_list	lst;
-
-// 	size = ft_smallest_sqr(number_hash);
-// 	fillit(lst, size, str);
-// }
