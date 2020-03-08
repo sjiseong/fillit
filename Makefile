@@ -6,13 +6,13 @@
 #    By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/27 20:41:32 by sjiseong          #+#    #+#              #
-#    Updated: 2020/03/07 18:45:39 by sjiseong         ###   ########.fr        #
+#    Updated: 2020/03/07 23:41:01 by sjiseong         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fillit
 
-SRC = main.c print.c parse_source.c fillit.c board.c order.c
+SRC = main.c print.c parse_source.c fillit.c board.c
 
 SRC_PATH = src/
 

@@ -6,13 +6,13 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:33:40 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/07 21:14:10 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/07 23:53:52 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-int		get_smallest_size(int **arr_tet)
+int		get_smallest_size(char **arr_tet)
 {
 	int		cnt;
 	int		ret;
@@ -56,17 +56,21 @@ char	**make_board(int board_size)
 	return (board);
 }
 
-void	copy_board(char	**cur, char **new, int bsize)
+void	copy_board(char **cur, char **new, int bsize)
 {
 	int		i;
 	int		j;
+	char	*p1;
+	char	*p2;
 
 	i = -1;
 	while (++i < bsize)
 	{
-		j = -1;
-		while (++j < bsize)
-			new[i][j] = cur[i][j];
+		j = bsize;
+		p1 = cur[i];
+		p2 = new[i];
+		while (j-- > 0)
+			*p2++ = *p1++;
 	}
 }
 

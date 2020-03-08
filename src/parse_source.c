@@ -6,7 +6,7 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 15:34:17 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/07 19:14:28 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/08 00:03:44 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,11 @@ char		*get_src(char *filename)
 	return (buf);
 }
 
-static	int	parse_tet(char *src, int *tet, int i)
+static	int	parse_tet(char *src, char *tet, int i, int nblock)
 {
 	int	x;
 	int	y;
-	int	nblock;
 
-	nblock = 0;
 	x = -1;
 	while (++x < 4)
 	{
@@ -61,14 +59,12 @@ static	int	parse_tet(char *src, int *tet, int i)
 		if (src[i++] != '\n')
 			return (-1);
 	}
-	if (src[i] != '\n' && src[i] != 0)
-		print_error();
-	if (src[i] == '\n' && !src[i + 1])
-		print_error();
+	if ((src[i] != '\n' && src[i] != 0) || (src[i] == '\n' && !src[i + 1]))
+		return (-1);
 	return (nblock);
 }
 
-static	int	check_tet(int *tet)
+static	int	check_tet(char *tet)
 {
 	int	i;
 	int	j;
@@ -83,8 +79,6 @@ static	int	check_tet(int *tet)
 		j = -1;
 		while (++j < 4)
 		{
-			if (i == j)
-				continue;
 			x = tet[j] % 4 - tet[i] % 4;
 			y = tet[j] / 4 - tet[i] / 4;
 			x = x < 0 ? -x : x;
@@ -98,19 +92,19 @@ static	int	check_tet(int *tet)
 	return (1);
 }
 
-int		**parse_src(char *src)
+char		**parse_src(char *src)
 {
-	int		**arr_tet;
+	char	**arr_tet;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	arr_tet = (int**)malloc(sizeof(int*) * 27);
+	arr_tet = (char**)malloc(sizeof(char*) * 27);
 	while (src[j * 21])
 	{
-		arr_tet[j] = (int*) malloc(sizeof(int) * 4);
-		if (parse_tet(src + j * 21, arr_tet[j], i) != 4)
+		arr_tet[j] = (char*)malloc(sizeof(char) * 4);
+		if (parse_tet(src + j * 21, arr_tet[j], i, 0) != 4)
 			print_error();
 		if (!check_tet(arr_tet[j]))
 			print_error();
