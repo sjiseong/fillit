@@ -6,7 +6,7 @@
 /*   By: sjiseong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:39:34 by sjiseong          #+#    #+#             */
-/*   Updated: 2020/03/07 23:57:39 by sjiseong         ###   ########.fr       */
+/*   Updated: 2020/03/09 17:11:39 by sjiseong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 #include "fillit.h"
 #include "libft.h"
 
-void	check_arg_num(int ac)
-{
-	if (ac != 2)
-	{
-		write(1, "usage: fillit source_file\n", 26);
-		print_error();
-	}
-}
-
 int		main(int ac, char **av)
 {
 	char	*src;
@@ -31,7 +22,11 @@ int		main(int ac, char **av)
 	char	**board;
 	int		board_size;
 
-	check_arg_num(ac);
+	if (ac != 2)
+	{
+		write(1, "usage: fillit source_file\n", 26);
+		return (-1);
+	}
 	if (!(src = get_src(av[1])))
 		print_error();
 	if (!(arr_tet = parse_src(src)))
